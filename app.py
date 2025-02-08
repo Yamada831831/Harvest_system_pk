@@ -15,6 +15,10 @@ class Inventory(db.Model):
     name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
+# アプリ起動時にデータベースを初期化
+with app.app_context():
+    db.create_all()
+
 @app.route('/')
 def home():
     items = Inventory.query.all()
