@@ -15,9 +15,21 @@ class Inventory(db.Model):
     name = db.Column(db.String(100), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
 
-# アプリ起動時にデータベースを初期化
+# アプリ起動時にデータベースを初期化＆サンプルデータを登録
 with app.app_context():
     db.create_all()
+    
+    # もしデータが空ならサンプルデータを追加
+    if Inventory.query.count() == 0:
+        sample_items = [
+            Inventory(name="段ボール", quantity=100),
+            Inventory(name="袋", quantity=200),
+            Inventory(name="トレー", quantity=150),
+            Inventory(name="ネット", quantity=50),
+            Inventory(name="シール", quantity=300),
+        ]
+        db.session.add_all(sample_items)
+        db.session.commit()
 
 @app.route('/')
 def home():
